@@ -34,7 +34,7 @@ function HomePage() {
         }}
       >
         <AddNewTask accessToken={accessToken} />
-        <TodoList />
+        <TodoList accessToken={accessToken} />
       </Box>
     </Container>
   );

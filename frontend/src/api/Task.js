@@ -14,14 +14,17 @@ export const taskCreateApi = async (payload, token) => {
   }
 };
 
-export const getTasksApi = async (token, queryParams) => {
+export const getTasksApi = async (token, queryParams = null) => {
   try {
-    const response = await axios.get(VITE_API_URL + "/api/tasks", {
+    const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      params: queryParams,
-    });
+    };
+    if (queryParams) {
+      config.params = queryParams;
+    }
+    const response = await axios.get(VITE_API_URL + "/api/tasks", config);
     return response.data;
   } catch (error) {
     throw error;

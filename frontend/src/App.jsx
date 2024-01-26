@@ -1,10 +1,14 @@
-import { useState } from "react";
 import "./App.css";
+import SignupSignIn from "./components/SignupSignIn";
+import { VITE_API_URL } from "./Globals.js";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <></>;
+  return (
+    <>
+      <SignupSignIn />
+      {/* {"VITE_URL:" + VITE_API_URL} */}
+    </>
+  );
 }
 
 export default App;

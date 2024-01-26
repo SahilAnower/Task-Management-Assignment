@@ -65,6 +65,11 @@ export const findAllTasks = async (searchPayload, filterPayload = null) => {
           },
         });
       }
+      if (filterPayload.count) {
+        pipeline.push({
+          $count: "count",
+        });
+      }
       res = await TaskModel.aggregate(pipeline);
     } else {
       res = await TaskModel.find(searchPayload, filterPayload);

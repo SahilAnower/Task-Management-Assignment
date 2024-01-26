@@ -33,7 +33,7 @@ function HomePage() {
           alignContent: "space-evenly",
         }}
       >
-        <AddNewTask />
+        <AddNewTask accessToken={accessToken} />
         <TodoList />
       </Box>
     </Container>

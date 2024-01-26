@@ -12,6 +12,9 @@ import Grid from "@mui/material/Grid";
 import CelebrationIcon from "@mui/icons-material/Celebration";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import Typography from "@mui/material/Typography";
+import { loginApi, signupApi } from "../api/SignupSigninForm";
+import { useTaskManagementStore } from "../store/store";
+import { showErrorToast, showSuccessToast } from "../errors/ErrorToast";
 
 function Copyright(props) {
   return (
@@ -32,6 +35,9 @@ function Copyright(props) {
 }
 
 function SignupSignIn() {
+  const setTokens = useTaskManagementStore((state) => state.setTokens);
+  //   const accessToken = useTaskManagementStore((state) => state.accessToken);
+
   const [isSignin, setIsSignin] = React.useState(false);
 
   const [signInFormData, setSignInFormData] = React.useState({
@@ -62,16 +68,56 @@ function SignupSignIn() {
     setSignUpFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleSignInSubmit = (event) => {
+  const handleSignInSubmit = async (event) => {
     event.preventDefault();
     console.log("Sign In Form Submitted:", signInFormData);
+    try {
+      const response = await loginApi({
+        email: signInFormData.email,
+        password: signInFormData.password,
+      });
+      setTokens(response.accessToken, response.refreshToken);
+      showSuccessToast("Sign in successful!");
+    } catch (error) {
+      // toast message for error
+      showErrorToast(error?.response?.data?.message);
+    }
+    setSignInFormData({
+      email: "",
+      password: "",
+      rememberMe: false,
+    });
     // api call to signin
   };
 
-  const handleSignUpSubmit = (event) => {
+  const handleSignUpSubmit = async (event) => {
     event.preventDefault();
     console.log("Sign Up Form Submitted:", signUpFormData);
+    try {
+      const response = await signupApi({
+        name: signUpFormData.name,
+        email: signUpFormData.email,
+        password: signUpFormData.password,
+      });
+      setTokens(response.accessToken, response.refreshToken);
+      showSuccessToast("Sign up successful!");
+    } catch (error) {
+      // toast message for error
+      showErrorToast(error?.response?.data?.message);
+    }
+    setSignUpFormData({
+      name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
     // api call to signup
+  };
+
+  const isEmailValid = (email) => {
+    const re =
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
   };
 
   //   const handleSubmit = (event) => {
@@ -150,6 +196,18 @@ function SignupSignIn() {
               autoFocus
               value={!isSignin ? signUpFormData.email : signInFormData.email}
               onChange={!isSignin ? handleSignUpChange : handleSignInChange}
+              error={
+                !isEmailValid(
+                  !isSignin ? signUpFormData.email : signInFormData.email
+                )
+              }
+              helperText={
+                !isEmailValid(
+                  !isSignin ? signUpFormData.email : signInFormData.email
+                )
+                  ? "Invalid email address"
+                  : ""
+              }
             />
             <TextField
               margin="normal"
@@ -197,6 +255,14 @@ function SignupSignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={
+                isSignin
+                  ? !signInFormData.email || !signInFormData.password
+                  : !signUpFormData.name ||
+                    !signUpFormData.email ||
+                    !signUpFormData.password ||
+                    !signUpFormData.confirmPassword
+              }
             >
               {isSignin ? "Sign In" : "Sign Up"}
             </Button>

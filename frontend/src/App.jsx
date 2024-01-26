@@ -1,10 +1,12 @@
-import { useState } from "react";
 import "./App.css";
+import SignupSignIn from "./components/SignupSignIn";
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return <></>;
+  return (
+    <>
+      <SignupSignIn />
+    </>
+  );
 }
 
 export default App;

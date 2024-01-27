@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 import { loginApi, signupApi } from "../api/SignupSigninForm";
 import { useTaskManagementStore } from "../store/store";
 import { showErrorToast, showSuccessToast } from "../errors/ErrorToast";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -37,6 +38,7 @@ function Copyright(props) {
 function SignupSignIn() {
   const setTokens = useTaskManagementStore((state) => state.setTokens);
   //   const accessToken = useTaskManagementStore((state) => state.accessToken);
+  const navigate = useNavigate();
 
   const [isSignin, setIsSignin] = React.useState(false);
 
@@ -87,6 +89,7 @@ function SignupSignIn() {
       password: "",
       rememberMe: false,
     });
+    navigate("/");
     // api call to signin
   };
 
@@ -112,6 +115,7 @@ function SignupSignIn() {
       confirmPassword: "",
     });
     // api call to signup
+    navigate("/");
   };
 
   const isEmailValid = (email) => {

@@ -14,7 +14,8 @@ export const createTask = async (payload) => {
 export const findAllTasks = async (searchPayload, filterPayload = null) => {
   try {
     let res;
-    if (filterPayload) {
+    // console.log(filterPayload);
+    if (filterPayload && Object.keys(filterPayload).length > 0) {
       const pipeline = [];
       if (filterPayload.isCompleted) {
         pipeline.push({

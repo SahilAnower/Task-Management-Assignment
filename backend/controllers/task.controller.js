@@ -18,6 +18,7 @@ export const taskCreate = async (req, res, next) => {
 
 export const taskFindAll = async (req, res, next) => {
   try {
+    // console.log("req.query: " + req.query);
     const response = await findAllTasksService(req.userId, req.query);
     return res.status(200).json(response);
   } catch (error) {

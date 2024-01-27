@@ -5,6 +5,7 @@ import {
   taskFindById,
   taskUpdateById,
   taskDeleteById,
+  taskFindPieChart,
 } from "../controllers/task.controller.js";
 
 const router = express.Router();
@@ -12,6 +13,8 @@ const router = express.Router();
 router.post("/", taskCreate);
 
 router.get("/", taskFindAll);
+
+router.get("/pie-chart", taskFindPieChart);
 
 router.get("/:id", taskFindById);
 

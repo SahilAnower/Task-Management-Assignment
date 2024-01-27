@@ -3,6 +3,7 @@ import {
   deleteTaskByIdService,
   findAllTasksService,
   findTaskByIdService,
+  findTasksPieChartService,
   updateTaskByIdService,
 } from "../services/task.services.js";
 
@@ -47,6 +48,15 @@ export const taskUpdateById = async (req, res, next) => {
 export const taskDeleteById = async (req, res, next) => {
   try {
     const response = await deleteTaskByIdService(req.params.id);
+    return res.status(200).json(response);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const taskFindPieChart = async (req, res, next) => {
+  try {
+    const response = await findTasksPieChartService(req.userId);
     return res.status(200).json(response);
   } catch (error) {
     next(error);

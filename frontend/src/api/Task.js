@@ -65,3 +65,20 @@ export const deleteTaskApi = async (token, _id) => {
     throw error;
   }
 };
+
+export const getPieChartDataApi = async (token) => {
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const response = await axios.get(
+      VITE_API_URL + `/api/tasks/pie-chart`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -7,7 +7,6 @@ import TaskModal from "./TaskModal";
 function UpdateTask({ accessToken, task }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
   const [updatedTask, setUpdatedTask] = React.useState(task);
 
   const handleChange = (event) => {
@@ -15,6 +14,13 @@ function UpdateTask({ accessToken, task }) {
     setUpdatedTask((prevTask) => ({
       ...prevTask,
       [name]: value,
+    }));
+  };
+
+  const handleIsCompleted = () => {
+    setUpdatedTask((prevTask) => ({
+      ...prevTask,
+      isCompleted: !prevTask.isCompleted,
     }));
   };
 
@@ -38,6 +44,11 @@ function UpdateTask({ accessToken, task }) {
     handleClose();
   };
 
+  const handleClose = () => {
+    setUpdatedTask(task);
+    setOpen(false);
+  };
+
   return (
     <div>
       <Button
@@ -54,6 +65,7 @@ function UpdateTask({ accessToken, task }) {
         handleSubmit={handleSubmit}
         handleChange={handleChange}
         task={updatedTask}
+        handleIsCompleted={handleIsCompleted}
         isAddTask={false}
       />
     </div>

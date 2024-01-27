@@ -37,6 +37,7 @@ function Copyright(props) {
 
 function SignupSignIn() {
   const setTokens = useTaskManagementStore((state) => state.setTokens);
+  const setEmail = useTaskManagementStore((state) => state.setEmail);
   //   const accessToken = useTaskManagementStore((state) => state.accessToken);
   const navigate = useNavigate();
 
@@ -79,6 +80,7 @@ function SignupSignIn() {
         password: signInFormData.password,
       });
       setTokens(response.accessToken, response.refreshToken);
+      setEmail(signInFormData.email);
       showSuccessToast("Sign in successful!");
     } catch (error) {
       // toast message for error
@@ -103,6 +105,7 @@ function SignupSignIn() {
         password: signUpFormData.password,
       });
       setTokens(response.accessToken, response.refreshToken);
+      setEmail(signUpFormData.email);
       showSuccessToast("Sign up successful!");
     } catch (error) {
       // toast message for error

@@ -5,7 +5,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { FormControl, InputLabel } from "@mui/material";
 
 function FilterList({ onSortOrderChange }) {
-  const [orderMenuItem, setOrderMenuItem] = useState(null);
+  const [orderMenuItem, setOrderMenuItem] = useState("");
   const [sortOrder, setSortOrder] = useState("");
 
   const handleSortOrderChange = (orderValue) => {
@@ -22,7 +22,9 @@ function FilterList({ onSortOrderChange }) {
     >
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
-          <InputLabel id="menuItemSelect">Sort By</InputLabel>
+          <InputLabel id="menuItemSelect" shrink={true}>
+            Sort By
+          </InputLabel>
           <Select
             value={orderMenuItem}
             onChange={(e) => setOrderMenuItem(e.target.value)}
@@ -31,7 +33,9 @@ function FilterList({ onSortOrderChange }) {
             labelId="menuItemSelect"
             label="Sort By"
           >
-            {/* <MenuItem value="">----</MenuItem> */}
+            <MenuItem value="" disabled>
+              Select an option
+            </MenuItem>
             <MenuItem value="createdAtOrder">Created At</MenuItem>
             <MenuItem value="dueDateOrder">Due Date</MenuItem>
             <MenuItem value="priorityOrder">Priority</MenuItem>
@@ -43,7 +47,9 @@ function FilterList({ onSortOrderChange }) {
       {/* Dropdown for sorting order (asc, desc, null) */}
       <Box sx={{ minWidth: 120 }}>
         <FormControl fullWidth>
-          <InputLabel id="orderItemSelect">Order By</InputLabel>
+          <InputLabel id="orderItemSelect" shrink={true}>
+            Order By
+          </InputLabel>
           <Select
             value={sortOrder}
             onChange={(e) => handleSortOrderChange(e.target.value)}
@@ -52,7 +58,9 @@ function FilterList({ onSortOrderChange }) {
             labelId="orderItemSelect"
             label="Order By"
           >
-            {/* <MenuItem value="">----</MenuItem> */}
+            <MenuItem value="" disabled>
+              Select an option
+            </MenuItem>
             <MenuItem value="1">Ascending</MenuItem>
             <MenuItem value="-1">Descending</MenuItem>
           </Select>

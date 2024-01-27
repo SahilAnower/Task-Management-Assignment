@@ -8,6 +8,8 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 const style = {
   position: "absolute",
@@ -29,6 +31,7 @@ function TaskModal({
   handleChange,
   task,
   isAddTask,
+  handleIsCompleted,
 }) {
   return (
     <Modal
@@ -94,6 +97,18 @@ function TaskModal({
               <MenuItem value={3}>High</MenuItem>
             </Select>
           </FormControl>
+          {!isAddTask && (
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={task.isCompleted}
+                  onChange={handleIsCompleted}
+                  name="isCompleted"
+                />
+              }
+              label="isCompleted?"
+            />
+          )}
           <Button type="submit" variant="contained" fullWidth>
             Submit
           </Button>

@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import TaskModel from "../models/Task.js";
 
 export const createTask = async (payload) => {
@@ -17,6 +18,13 @@ export const findAllTasks = async (searchPayload, filterPayload = null) => {
     // console.log(filterPayload);
     if (filterPayload && Object.keys(filterPayload).length > 0) {
       const pipeline = [];
+      if (searchPayload && Object.keys(searchPayload).length > 0) {
+        pipeline.push({
+          $match: {
+            user: new mongoose.Types.ObjectId(searchPayload?.user),
+          },
+        });
+      }
       if (filterPayload.isCompleted) {
         pipeline.push({
           $match: {
@@ -117,6 +125,71 @@ export const deleteTask = async (searchPayload) => {
     if (res) {
       return res;
     }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const findAllTasksPieChart = async (userId) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const res = await TaskModel.aggregate([
+      {
+        $match: {
+          user: new mongoose.Types.ObjectId(userId),
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          completedTasksToday: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $eq: ["$isCompleted", true] },
+                    { $gte: ["$createdAt", today] },
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          pendingTasksToday: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $eq: ["$isCompleted", false] },
+                    { $gte: ["$createdAt", today] },
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          completedTasksAllTime: {
+            $sum: {
+              $cond: [{ $eq: ["$isCompleted", true] }, 1, 0],
+            },
+          },
+          pendingTasksAllTime: {
+            $sum: {
+              $cond: [{ $eq: ["$isCompleted", false] }, 1, 0],
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+        },
+      },
+    ]);
+    return res?.[0];
   } catch (error) {
     throw error;
   }

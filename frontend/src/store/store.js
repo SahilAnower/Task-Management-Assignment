@@ -6,8 +6,16 @@ export const useTaskManagementStore = create(
     (set) => ({
       accessToken: null,
       refreshToken: null,
+      email: null,
       setTokens: (accessToken, refreshToken) =>
         set({ accessToken, refreshToken }),
+      setEmail: (email) => set({ email }),
+      resetStore: () =>
+        set({
+          accessToken: null,
+          refreshToken: null,
+          email: null,
+        }),
     }),
     {
       name: "task-management-store",

@@ -2,6 +2,7 @@ import {
   createTask,
   deleteTask,
   findAllTasks,
+  findAllTasksPieChart,
   findTask,
   updateTask,
 } from "../data/task.db.js";
@@ -97,6 +98,18 @@ export const deleteTaskByIdService = async (taskId) => {
       success: true,
       message: "Task deleted successfully with id: " + taskId,
     };
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const findTasksPieChartService = async (userId) => {
+  try {
+    if (!userId) {
+      throw new CustomError("userId is mandatory field", 400);
+    }
+    const allTasks = await findAllTasksPieChart(userId);
+    return allTasks;
   } catch (error) {
     throw error;
   }

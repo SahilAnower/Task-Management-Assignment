@@ -1,29 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { getTasksApi } from "../api/Task";
-import { showErrorToast } from "../errors/ErrorToast";
 
-function CompletedTasksCard({ accessToken }) {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    async function getCompletedTasks() {
-      try {
-        const queryParams = {
-          isCompleted: true,
-          count: 1,
-        };
-        const response = await getTasksApi(accessToken, queryParams);
-        setCount(response[0]?.count);
-      } catch (error) {
-        showErrorToast(error?.response?.data?.message);
-      }
-    }
-    getCompletedTasks();
-  }, []);
-
+function CompletedTasksCard({ tasksCount }) {
   return (
     <Card>
       <CardContent>
@@ -38,7 +18,7 @@ function CompletedTasksCard({ accessToken }) {
           alignContent="center"
           mt={2}
         >
-          {count}
+          {tasksCount?.completedTasksAllTime}
         </Typography>
       </CardContent>
     </Card>

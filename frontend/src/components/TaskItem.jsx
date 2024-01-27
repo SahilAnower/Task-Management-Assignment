@@ -6,6 +6,8 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import UpdateTask from "./UpdateTask";
+import DeleteTaskDialog from "./DeleteTaskDialog";
 
 function TaskItem({
   title,
@@ -14,7 +16,15 @@ function TaskItem({
   isCompleted,
   dueDate,
   createdAt,
+  _id,
+  accessToken,
 }) {
+  const formatDate = (originalDateString) => {
+    const date = new Date(originalDateString);
+    const formattedDateString = date.toISOString().split("T")[0];
+    return formattedDateString;
+  };
+
   return (
     <>
       <ListItem alignItems="flex-start">
@@ -65,6 +75,26 @@ function TaskItem({
                 <Typography variant="body2" color="text.secondary">
                   Created At: {createdAt}
                 </Typography>
+                <Box
+                  display={"flex"}
+                  justifyContent={"space-between"}
+                  alignContent={"center"}
+                  gap={2}
+                >
+                  <UpdateTask
+                    accessToken={accessToken}
+                    task={{
+                      _id,
+                      title,
+                      description,
+                      priority,
+                      isCompleted,
+                      dueDate: formatDate(dueDate),
+                      createdAt,
+                    }}
+                  />
+                  <DeleteTaskDialog accessToken={accessToken} _id={_id} />
+                </Box>
               </Box>
             </React.Fragment>
           }

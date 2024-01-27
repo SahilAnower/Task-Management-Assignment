@@ -61,12 +61,14 @@ function TodoList({ accessToken }) {
         {allTasks.map((task) => (
           <TaskItem
             key={task._id}
+            _id={task._id}
             title={task.title}
             description={task.description}
             priority={task.priority}
             isCompleted={task.isCompleted}
             dueDate={task.dueDate}
             createdAt={task.createdAt}
+            accessToken={accessToken}
           />
         ))}
       </List>

@@ -52,6 +52,8 @@ function TaskModal({
             name="title"
             value={task.title}
             onChange={handleChange}
+            error={!task.title}
+            helperText={!task.title ? "Title is required" : ""}
           />
           <TextField
             label="Description"
@@ -74,6 +76,8 @@ function TaskModal({
             InputLabelProps={{
               shrink: true,
             }}
+            error={!task.dueDate}
+            helperText={!task.dueDate ? "Due Date is required" : ""}
           />
           <FormControl fullWidth margin="normal">
             <InputLabel
@@ -109,8 +113,13 @@ function TaskModal({
               label="isCompleted?"
             />
           )}
-          <Button type="submit" variant="contained" fullWidth>
-            Submit
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            disabled={!task.title || !task.dueDate}
+          >
+            {isAddTask ? "Add" : "Update"}
           </Button>
         </form>
       </Box>

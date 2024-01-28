@@ -10,9 +10,12 @@ import { useTaskManagementStore } from "../store/store";
 import { getPieChartDataApi } from "../api/Task";
 import { showErrorToast } from "../errors/ErrorToast";
 import AccountMenu from "./AccountMenu";
+import { refreshTokenApi } from "../api/SignupSigninForm";
 
 function HomePage() {
   const accessToken = useTaskManagementStore((state) => state.accessToken);
+  const refreshToken = useTaskManagementStore((state) => state.refreshToken);
+  const setTokens = useTaskManagementStore((state) => state.setTokens);
 
   const [tasksCount, setTasksCount] = useState({
     completedTasksToday: 0,
@@ -32,6 +35,19 @@ function HomePage() {
     }
     getTasksCount();
   }, []);
+
+  useEffect(() => {
+    async function refreshAccessToken() {
+      try {
+        const response = await refreshTokenApi(refreshToken);
+        setTokens(response?.accessToken, response?.refreshToken);
+      } catch (error) {
+        console.error("Error refreshing access token: ", error?.response?.data);
+      }
+    }
+    const refreshInterval = setInterval(refreshAccessToken, 60 * 60 * 1000);
+    return () => clearInterval(refreshInterval);
+  }, [accessToken, refreshToken]);
 
   return (
     <Container maxWidth="xl">

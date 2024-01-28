@@ -24,3 +24,17 @@ export const loginApi = async (payload) => {
     throw error;
   }
 };
+
+export const refreshTokenApi = async (refreshToken) => {
+  try {
+    const response = await axios.post(
+      VITE_API_URL + "/api/auth/refresh-access-token",
+      {
+        refreshToken: refreshToken,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

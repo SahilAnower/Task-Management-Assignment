@@ -16,6 +16,10 @@ import { loginApi, signupApi } from "../api/SignupSigninForm";
 import { useTaskManagementStore } from "../store/store";
 import { showErrorToast, showSuccessToast } from "../errors/ErrorToast";
 import { useNavigate } from "react-router-dom";
+import InputAdornment from "@mui/material/InputAdornment";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
 
 function Copyright(props) {
   return (
@@ -42,6 +46,8 @@ function SignupSignIn() {
   const navigate = useNavigate();
 
   const [isSignin, setIsSignin] = React.useState(false);
+
+  const [showPassword, setShowPassword] = React.useState(false);
 
   const [signInFormData, setSignInFormData] = React.useState({
     email: "",
@@ -127,6 +133,10 @@ function SignupSignIn() {
     return re.test(String(email).toLowerCase());
   };
 
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   //   const handleSubmit = (event) => {
   //     event.preventDefault();
   //     const data = new FormData(event.currentTarget);
@@ -159,17 +169,20 @@ function SignupSignIn() {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Box
           sx={{
-            my: 8,
+            my: 2,
             mx: 4,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
+          <Typography component="h1" variant="h6">
+            Welcome to Sahil - <strong>Task Manager App</strong> 🤯!
+          </Typography>
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             {isSignin ? <ExitToAppIcon /> : <CelebrationIcon />}
           </Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h3" variant="h6">
             {isSignin ? "Sign in" : "Sign up"}
           </Typography>
           <Box
@@ -222,13 +235,26 @@ function SignupSignIn() {
               fullWidth
               name="password"
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               autoComplete="current-password"
               value={
                 !isSignin ? signUpFormData.password : signInFormData.password
               }
               onChange={!isSignin ? handleSignUpChange : handleSignInChange}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleTogglePassword} edge="end">
+                      {showPassword ? (
+                        <VisibilityOffIcon />
+                      ) : (
+                        <VisibilityIcon />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             {!isSignin && (
               <TextField
@@ -242,6 +268,14 @@ function SignupSignIn() {
                 autoComplete="new-password"
                 value={signUpFormData.confirmPassword}
                 onChange={handleSignUpChange}
+                error={
+                  signUpFormData.password !== signUpFormData.confirmPassword
+                }
+                helperText={
+                  signUpFormData.password !== signUpFormData.confirmPassword
+                    ? "Passwords do not match"
+                    : ""
+                }
               />
             )}
             {isSignin && (
@@ -268,7 +302,8 @@ function SignupSignIn() {
                   : !signUpFormData.name ||
                     !signUpFormData.email ||
                     !signUpFormData.password ||
-                    !signUpFormData.confirmPassword
+                    !signUpFormData.confirmPassword ||
+                    signUpFormData.confirmPassword !== signUpFormData.password
               }
             >
               {isSignin ? "Sign In" : "Sign Up"}
